@@ -310,7 +310,6 @@ class PyFlow(QMainWindow):
         self.updateLabel()
 
     def loadFromData(self, data, clearHistory=False):
-
         # check first if all packages we are trying to load are legal
         missedPackages = set()
         if not validateGraphDataPackages(data, missedPackages):

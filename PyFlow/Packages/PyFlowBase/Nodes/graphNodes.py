@@ -49,6 +49,7 @@ class graphInputs(NodeBase):
         return ''
 
     def addOutPin(self, name=None, dataType="AnyPin"):
+        # called after postCreate was executed
         if name is None:
             name = self.getUniqPinName('in')
         p = self.createOutputPin(name, dataType, constraint=name, structConstraint=name, structure=StructureType.Multi)
@@ -57,17 +58,17 @@ class graphInputs(NodeBase):
             p.enableOptions(PinOptions.AllowAny | PinOptions.DictElementSupported)
         return p
 
-
     def compute(self, *args, **kwargs):
         for o in self.outputs.values():
             for i in o.affected_by:
-                if len(i.affected_by)>0:
+                if len(i.affected_by) > 0:
                     for e in i.affected_by:
                         o.setData(e.getData())
                 else:
                     o.setData(i.getData())
 
     def postCreate(self, jsonTemplate=None):
+        # called after node was added to graph
         super(graphInputs, self).postCreate(jsonTemplate=jsonTemplate)
         # recreate dynamically created pins
         existingPins = self.namePinOutputsMap

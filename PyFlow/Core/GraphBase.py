@@ -202,15 +202,15 @@ class GraphBase(ISerializable):
         # restore nodes
         for nodeJson in jsonData['nodes']:
             # check if variable getter or setter and pass variable
-            nodeArgs = ()
             nodeKwargs = {}
             if nodeJson['type'] in ('getVar', 'setVar'):
                 nodeKwargs['var'] = self._vars[uuid.UUID(nodeJson['varUid'])]
             nodeJson['owningGraphName'] = self.name
-            node = getRawNodeInstance(nodeJson['type'], packageName=nodeJson['package'], libName=nodeJson['lib'], *nodeArgs, **nodeKwargs)
+            node = getRawNodeInstance(nodeJson['type'], packageName=nodeJson['package'],
+                                      libName=nodeJson['lib'], **nodeKwargs)
             self.addNode(node, nodeJson)
 
-        # restore connection
+        # restore connection, left hand side pin and right hand side pin
         for nodeJson in jsonData['nodes']:
             for nodeOutputJson in nodeJson['outputs']:
                 for linkData in nodeOutputJson['linkedTo']:
@@ -434,8 +434,9 @@ class GraphBase(ISerializable):
         if node.uid in self._nodes:
             return False
 
-        # Check if this node is variable get/set. Variables created in child graphs are not visible to parent ones
-        # Do not disrupt variable scope
+        # Check if this node is variable get/set.
+        # Variables created in child graphs are not visible to parent ones
+        # Do not disrupt variable scope.
         if node.__class__.__name__ in ['getVar', 'setVar']:
             var = self.graphManager.findVariableByUid(node.variableUid())
             variableLocation = var.location()

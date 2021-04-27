@@ -109,6 +109,7 @@ def CreateRawPin(name, owningNode, dataType, direction, **kwds):
 
 
 def getRawNodeInstance(nodeClassName, packageName=None, libName=None, **kwargs):
+    # raw instance no uid
     from PyFlow.Core.NodeBase import NodeBase
     package = GET_PACKAGE_CHECKED(packageName)
     # try find function first

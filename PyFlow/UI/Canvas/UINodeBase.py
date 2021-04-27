@@ -1532,6 +1532,7 @@ def REGISTER_UI_NODE_FACTORY(packageName, factory):
 
 
 def getUINodeInstance(raw_instance):
+    # through here to generate all node add UI
     packageName = raw_instance.packageName
     instance = None
     if packageName in UI_NODES_FACTORIES:

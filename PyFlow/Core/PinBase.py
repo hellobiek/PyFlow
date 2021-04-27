@@ -663,9 +663,7 @@ class PinBase(IPin):
 
         :rtype: object
         """
-        if self._data is None:
-            return self._defaultValue
-        return self._data
+        return self._data if self._data else self._defaultValue
 
     def aboutToConnect(self, other):
         """This method called right before two pins connected
