@@ -23,9 +23,9 @@
 import re
 import math
 import time
-import inspect
 import struct
 import weakref
+from pandas import DataFrame
 try:
     from queue import Queue
 except:
@@ -242,7 +242,8 @@ def cycleCheck(src, dst):
 def arePinsConnected(src, dst):
     """Checks if two pins are connected
 
-    .. note:: Pins can be passed in any order if **src** pin is :py:class:`PyFlow.Core.Common.PinDirection`, they will be swapped
+    .. note:: Pins can be passed in any order if **src** pin is
+    :py:class:`PyFlow.Core.Common.PinDirection`, they will be swapped
 
     :param src: left hand side pin
     :type src: :py:class:`PyFlow.Core.PinBase`
@@ -305,6 +306,7 @@ def canConnectPins(src, dst):
     :returns: True if connection can be made, and False if connection is not possible
     :rtype: bool
     """
+
     if src is None or dst is None:
         return False
 
@@ -403,6 +405,7 @@ def canConnectPins(src, dst):
             if all([src.dataType in list(dst.allowedDataTypes([], dst._defaultSupportedDataTypes, selfCheck=dst.optionEnabled(PinOptions.AllowMultipleConnections), defaults=True)) + ["AnyPin"],
                    dst.checkFree([], selfCheck=dst.optionEnabled(PinOptions.AllowMultipleConnections))]):
                 return True
+
             if all([dst.dataType in list(src.allowedDataTypes([], src._defaultSupportedDataTypes, defaults=True)) + ["AnyPin"],
                    src.checkFree([])]):
                 return True
@@ -760,9 +763,10 @@ class PinOptions(Flag):
     .. seealso:: :meth:`~PyFlow.Core.PinBase.PinBase.enableOptions` :meth:`~PyFlow.Core.PinBase.PinBase.disableOptions`
     """
 
-    ArraySupported = auto()  #: Pin can hold array data structure
-    DictSupported = auto()  #: Pin can hold dict data structure
-    SupportsOnlyArrays = auto()  #: Pin will only support other pins with array data structure
+    ArraySupported = auto()     #: Pin can hold array data structure
+    DictSupported = auto()      #: Pin can hold dict data structure
+    SupportsOnlyArrays = auto() #: Pin will only support other pins with array data structure
+    DataFrameSupported = auto() #: Pin can hold dataframe structure
 
     AllowMultipleConnections = auto()  #: This enables pin to allow more that one input connection. See :func:`~PyFlow.Core.Common.connectPins`
 
@@ -782,7 +786,8 @@ class StructureType(IntEnum):
     Single = 0  #: Single data structure
     Array = 1  #: Python list structure, represented as arrays -> typed and lists -> non typed
     Dict = 2  #: :py:class:`PFDict` structure, is basically a rey typed python dict
-    Multi = 3  #: This means it can became any of the previous ones on connection/user action
+    DataFrame = 3 #：Python DataFrame Structure
+    Multi = 4  #: This means it can became any of the previous ones on connection/user action
 
 
 def findStructFromValue(value):
@@ -797,6 +802,8 @@ def findStructFromValue(value):
         return StructureType.Array
     if isinstance(value, dict):
         return StructureType.Dict
+    if isinstance(value, DataFrame):
+        return StructureType.DataFrame
     return StructureType.Single
 
 

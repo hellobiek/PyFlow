@@ -16,20 +16,24 @@
 import sys
 from PyFlow.App import PyFlow
 from Qt.QtWidgets import QApplication
+from pycallgraph3 import PyCallGraph
+from pycallgraph3.output import GraphvizOutput
 
 
 def main():
-    app = QApplication(sys.argv)
-
-    instance = PyFlow.instance(software="standalone")
-    if instance is not None:
-        app.setActiveWindow(instance)
-        instance.show()
-
-        try:
-            sys.exit(app.exec_())
-        except Exception as e:
-            print(e)
+    graphviz = GraphvizOutput()
+    graphviz.output_file = 'C:\\Users\\yuepf01\\Desktop\\basic.png'
+    with PyCallGraph(output=graphviz):
+        app = QApplication(sys.argv)
+        instance = PyFlow.instance(software="standalone")
+        if instance is not None:
+            app.setActiveWindow(instance)
+            instance.show()
+        #try:
+        #    sys.exit(app.exec_())
+        #except Exception as e:
+        #    print(e)
+        app.exec_()
 
 
 if __name__ == '__main__':

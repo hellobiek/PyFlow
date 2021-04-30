@@ -33,13 +33,16 @@ class AnyPin(PinBase):
     This type of Pin allow to create abstract Nodes that can operate in more than one dataType.
 
     By default AnyPin non Initialized will be marked as error, as PyFlow can't know what is inside.
-    This Error can be avoided by enabling :py:attr:`PyFlow.Core.Common.PinOptions.AllowAny`. Thats how NonTyped Lists are made.
+    This Error can be avoided by enabling :py:attr:`PyFlow.Core.Common.PinOptions.AllowAny`.
+    Thats how NonTyped Lists are made.
 
-    By default :py:attr:`PyFlow.Core.Common.PinOptions.ChangeTypeOnConnection` is enabled, and that means that it will change
-    its internal dataType to the new dataType provided by connection or user Initialization. If disabled, pin will not allow changes.
+    By default :py:attr:`PyFlow.Core.Common.PinOptions.ChangeTypeOnConnection` is enabled,
+    and that means that it will change its internal dataType to the new dataType provided
+    by connection or user Initialization. If disabled, pin will not allow changes.
 
-    Is important to define a bunch of allowedDataTypes on pin creation, this will restrict what pins can be connected and what no,
-    so even being a AnyPin, it can be defined to allow for example only ["FloatPin","IntPin"] so only those could be connected.
+    Is important to define a bunch of allowedDataTypes on pin creation, this will restrict
+    what pins can be connected and what no, so even being a AnyPin, it can be defined to
+    allow for example only ["FloatPin","IntPin"] so only those could be connected.
 
     :param self.singleInit: can be set to True, so once initialized, it will never be able to change dataType
     :param self.checkForErrors: can be set To False so it will never try to find errors
@@ -144,8 +147,8 @@ class AnyPin(PinBase):
                 break
 
     def updateError(self, traversed=[], updateNeis=False):
-        """Check if pin dataType is "AnyPin" and if it is, checks if it can change Type on connection, and if it can, marked as error.
-        Is a iterative Function that traverses connected and constrained Pins
+        """Check if pin dataType is "AnyPin" and if it is, checks if it can change Type on connection,
+        and if it can, marked as error.Is a iterative Function that traverses connected and constrained Pins
 
         :param traversed: Current Iterated neighbors, defaults to []
         :type traversed: list, optional
@@ -163,7 +166,8 @@ class AnyPin(PinBase):
         for neighbor in nodePins:
             if neighbor not in traversed:
                 if all([neighbor.activeDataType == "AnyPin",
-                        neighbor.canChangeTypeOnConnection([], neighbor.optionEnabled(PinOptions.ChangeTypeOnConnection), []),
+                        neighbor.canChangeTypeOnConnection([],
+                                 neighbor.optionEnabled(PinOptions.ChangeTypeOnConnection), []),
                         not neighbor.optionEnabled(PinOptions.AllowAny)]):
                     neighbor.setError("AnyPin Not Initialized")
                     neighbor.super = None
@@ -379,7 +383,8 @@ class AnyPin(PinBase):
 
         :param dataType: New DataType we want the pin to became
         :type dataType: string
-        :param initializing:  If initializing AnyPin can have same strength as other types, if not, "AnyPin" Pin will always be weaker than other dataType, if, defaults to False
+        :param initializing:  If initializing AnyPin can have same strength as other types, if not,
+                              "AnyPin" Pin will always be weaker than other dataType, if, defaults to False
         :type initializing: bool, optional
         :returns: True if it can change to the asked dataType
         :rtype: bool

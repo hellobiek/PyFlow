@@ -101,12 +101,7 @@ Examples:
         >>> ("CacheEnabled" : bool)
 
 """
-
-try:
-    from inspect import getfullargspec as getargspec
-except:
-    from inspect import getargspec
-
+from inspect import getfullargspec as getargspec, getmembers, isfunction
 from PyFlow.Core.Common import *
 
 empty = {}
@@ -144,7 +139,7 @@ class FunctionLibraryBase(object):
     def __init__(self, packageName):
         super(FunctionLibraryBase, self).__init__()
         self.__foos = {}
-        for name, function in inspect.getmembers(self, inspect.isfunction):
+        for name, function in getmembers(self, isfunction):
             function.__annotations__["packageName"] = packageName
             function.__annotations__["lib"] = self.__class__.__name__
             self.__foos[name] = function

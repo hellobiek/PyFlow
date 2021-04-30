@@ -397,7 +397,13 @@ class PinBase(IPin):
         self._alwaysDict = jsonData['alwaysDict']
 
         try:
-            self.setData(json.loads(jsonData['value'], cls=self.jsonDecoderClass()))
+            if self.dataType == "DataFramePin":
+                data = self.data_frame_manager.read(jsonData['value'])
+                if data is None:
+                    raise Exception(f"can not read data {jsonData['value']}")
+                self.setData(data)
+            else:
+                self.setData(json.loads(jsonData['value'], cls=self.jsonDecoderClass()))
         except Exception as e:
             self.setData(self.defaultValue())
 
@@ -414,9 +420,13 @@ class PinBase(IPin):
         serializedData = None
         if not self.dataType == "AnyPin":
             if storable:
-                serializedData = json.dumps(self.currentData(), cls=self.jsonEncoderClass())
-            #else:
-            #    serializedData = json.dumps(self.defaultValue(), cls=self.jsonEncoderClass())
+                if self.dataType == "DataFramePin":
+                    filename = self.data_frame_manager.write(self.currentData())
+                    if filename is None:
+                        raise Exception(f"can not store data: {self.currentData()}")
+                    serializedData = filename
+                else:
+                    serializedData = json.dumps(self.currentData(), cls=self.jsonEncoderClass())
 
         data = {
             'name': self.name,
@@ -663,7 +673,7 @@ class PinBase(IPin):
 
         :rtype: object
         """
-        return self._data if self._data else self._defaultValue
+        return self._defaultValue if self._data is None else self._data
 
     def aboutToConnect(self, other):
         """This method called right before two pins connected

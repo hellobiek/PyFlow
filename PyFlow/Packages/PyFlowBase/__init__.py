@@ -12,6 +12,7 @@ from PyFlow.Packages.PyFlowBase.Pins.ExecPin import ExecPin
 from PyFlow.Packages.PyFlowBase.Pins.FloatPin import FloatPin
 from PyFlow.Packages.PyFlowBase.Pins.IntPin import IntPin
 from PyFlow.Packages.PyFlowBase.Pins.StringPin import StringPin
+from PyFlow.Packages.PyFlowBase.Pins.DataFramePin import DataFramePin
 
 # Function based nodes
 from PyFlow.Packages.PyFlowBase.FunctionLibraries.ArrayLib import ArrayLib
@@ -166,6 +167,7 @@ _PINS = {
     FloatPin.__name__: FloatPin,
     IntPin.__name__: IntPin,
     StringPin.__name__: StringPin,
+    DataFramePin.__name__: DataFramePin,
 }
 
 # Toolbar will be created in following order

@@ -501,6 +501,8 @@ class NodeBase(INode):
             p.initAsArray(True)
         elif structure == StructureType.Dict:
             p.initAsDict(True)
+        elif structure == StructureType.DataFrame:
+            p.enableOptions(PinOptions.DataFrameSupported)
         elif structure == StructureType.Multi:
             p.enableOptions(PinOptions.ArraySupported)
 
@@ -528,7 +530,8 @@ class NodeBase(INode):
         p.markedAsDirty.connect(self.setDirty.send)
         return p
 
-    def createOutputPin(self, pinName, dataType, defaultValue=None, structure=StructureType.Single, constraint=None, structConstraint=None, supportedPinDataTypes=[], group=""):
+    def createOutputPin(self, pinName, dataType, defaultValue=None, structure=StructureType.Single, constraint=None,
+                        structConstraint=None, supportedPinDataTypes=[], group=""):
         """Creates output pin
 
         :param pinName: Pin name
@@ -557,6 +560,8 @@ class NodeBase(INode):
             p.initAsArray(True)
         elif structure == StructureType.Dict:
             p.initAsDict(True)
+        elif structure == StructureType.DataFrame:
+            p.enableOptions(PinOptions.DataFrameSupported)
         elif structure == StructureType.Multi:
             p.enableOptions(PinOptions.ArraySupported)
 

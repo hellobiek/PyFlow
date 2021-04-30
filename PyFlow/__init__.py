@@ -155,6 +155,30 @@ def getRawNodeInstance(nodeClassName, packageName=None, libName=None, **kwargs):
                             compoundNode._rawGraphJson = json.loads(jsonString)
                         return compoundNode
 
+class NSingletonDecorator:
+    """Decorator to make class unique, so each time called same object returned
+    """
+    allInstances = []
+
+    @staticmethod
+    def destroyAll():
+        for instance in NSingletonDecorator.allInstances:
+            instance.destroy()
+
+    def __init__(self, cls):
+        self.cls = cls
+        self.instance = None
+        self.allInstances.append(self)
+
+    def destroy(self):
+        del self.instance
+        self.instance = None
+
+    def __call__(self, *args, **kwds):
+        if self.instance is None:
+            self.instance = self.cls(*args, **kwds)
+        return self.instance
+
 
 def INITIALIZE(additionalPackageLocations=[], software=""):
     from PyFlow.UI.Tool import REGISTER_TOOL
