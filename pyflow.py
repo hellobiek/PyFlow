@@ -21,19 +21,20 @@ from pycallgraph3.output import GraphvizOutput
 
 
 def main():
-    graphviz = GraphvizOutput()
-    graphviz.output_file = 'C:\\Users\\yuepf01\\Desktop\\basic.png'
-    with PyCallGraph(output=graphviz):
-        app = QApplication(sys.argv)
-        instance = PyFlow.instance(software="standalone")
-        if instance is not None:
-            app.setActiveWindow(instance)
-            instance.show()
-        #try:
-        #    sys.exit(app.exec_())
-        #except Exception as e:
-        #    print(e)
-        app.exec_()
+    #graphviz = GraphvizOutput()
+    #graphviz.output_file = 'C:\\Users\\yuepf01\\Desktop\\basic.png'
+    #with PyCallGraph(output=graphviz):
+    app = QApplication(sys.argv)
+
+    instance = PyFlow.instance(software="standalone")
+    if instance is not None:
+        app.setActiveWindow(instance)
+        instance.show()
+
+    try:
+        sys.exit(app.exec_())
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
